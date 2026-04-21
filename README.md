@@ -133,33 +133,41 @@ This is the main regression path for the current project.
 
 ---
 
+---
+
+## Documentation
+
 ## Validation status
+
+The project has been validated across multiple sample batches, with each batch targeting a different layer of object-data complexity.
 
 ### First-batch sample
 
 Validated:
 
-* basic unit fields
-* basic ability fields
-* basic item fields
-* WTS string resolution
-* round-trip import/export flow
+- baseline unit / ability / item support
+- WTS string resolution
+- core Patchwork import/export flow
 
 ### Second-batch sample
 
 Validated:
 
-* richer unit combat fields
-* target flag / preference parsing
-* repeated ability values
-* additional ability multi-level data
-* item text/reference fields
-* exporter symmetry for newly mapped fields
-* one-command round-trip verification
+- richer unit combat-field coverage
+- repeated and multi-level ability field support
+- additional item text/reference handling
+- exporter symmetry for newly mapped fields
+- stable one-command round-trip validation
 
----
+### Third-batch sample
 
-## Documentation
+Validated:
+
+- additional repeated ability field families
+- scalar attribute-style ability fields
+- additional item text/cost fields
+- broader field coverage without changing the core workflow
+- continued regression stability under a more targeted boundary sample
 
 * `docs/object-field-mapping-status.md`
 * `docs/second-batch-validation.md`
