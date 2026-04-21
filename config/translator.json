@@ -1,0 +1,6 @@
+{
+  "command": "node",
+  "args": [
+    "scripts/fake-wc3-translator.js"
+  ]
+}
