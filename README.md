@@ -17,23 +17,52 @@ The goal is not just to parse files once, but to build a  **repeatable, verifiab
 
 ---
 
+---
+
 ## Current milestone
 
-**v0.3 - Patchwork round-trip core working**
+**v0.4 - broader field coverage and regression stability**
 
-At this stage, the project already supports:
+At this stage, the project supports:
 
-* Patchwork import for units / abilities / items
-* WTS string resolution
-* internal object model conversion
-* CLI list/show/edit commands
-* Patchwork JSON export
-* Patchwork `json2war`
-* first-batch sample validation
-* second-batch sample validation
-* one-command round-trip validation
+- Patchwork import for units / abilities / items
+- WTS string resolution
+- internal object model conversion
+- CLI inspect/edit flow
+- Patchwork JSON export
+- Patchwork `json2war`
+- first-batch validation
+- second-batch validation
+- third-batch validation
+- one-command round-trip validation
+- broader repeated ability field support
+- broader item text/cost field support
+- expanded unit combat-field coverage
+
+This milestone reflects the point where the project moved beyond a basic round-trip prototype and demonstrated broader field coverage with continued importer/exporter symmetry across multiple validation batches.
 
 ---
+
+## Next milestone direction
+
+**v0.5 - semantic field refinement started**
+
+The next phase focuses less on simply absorbing more raw Patchwork fields and more on improving the semantic quality of the internal object model.
+
+This means the project is beginning to move from raw field capture toward derived semantic values such as:
+
+- `combatType`
+- `attackType`
+- `armorType`
+
+Early examples of this are already starting to work in the codebase, where some units no longer show placeholder values like `Unknown` for these fields.
+
+The strategy for this phase remains intentionally conservative:
+
+- preserve raw imported fields
+- derive semantic fields only from already observed real sample values
+- avoid large speculative enum systems too early
+- continue validating all changes through the existing round-trip workflow
 
 ## Core workflow
 
@@ -218,5 +247,6 @@ Planned next directions include:
 * strengthening regression validation
 * testing against more complex sample maps
 * optionally building a more user-friendly interface later
+
 
 <pre class="overflow-visible! px-0!" data-start="7240" data-end="7733"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute end-1.5 top-1 z-2 md:end-2 md:top-1"></div><div class="relative"><div class="pe-11 pt-3"><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼ5 ͼj"><div class="cm-scroller"><div class="cm-content q9tKkq_readonly"></div></div></div></div></div></div></div></div></div></div></div></div></div></pre>
