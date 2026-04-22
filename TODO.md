@@ -1,20 +1,30 @@
 # TODO
 
-This file tracks the current unfinished work and next-step priorities for `wc3-map-object-editor`.
+This file tracks the current unfinished work and near-term priorities for `wc3-map-object-editor`.
 
 It is intentionally short, practical, and aligned with the current project direction.
 
 ---
 
-## Current milestone
+## Current status
 
-**v0.4 - broader field coverage and regression stability**
+The project is no longer only an object-data round-trip prototype.
 
-Completed at this stage:
+It now has three visible layers:
+
+1. **object-data pipeline**
+2. **toolbox-style object tuning commands**
+3. **first-pass kill reward gameplay script module**
+
+---
+
+## Stable foundation already in place
+
+Completed and already working:
 
 - Patchwork import for units / abilities / items
 - WTS string resolution
-- internal `MapDataFile` conversion
+- unified internal `MapDataFile`
 - CLI inspect/edit flow
 - Patchwork JSON export
 - Patchwork `json2war`
@@ -22,17 +32,43 @@ Completed at this stage:
 - second-batch validation
 - third-batch validation
 - one-command round-trip validation
-- broader repeated ability field support
-- broader item text/cost field support
-- expanded unit combat-field coverage
 
 ---
 
-## Next milestone direction
+## Current toolbox status
 
-**v0.5 - semantic field refinement started**
+Implemented object-data toolbox commands:
 
-This stage focuses on improving the meaning of the internal object model, not just expanding raw field coverage.
+- `unit buff`
+- `item buff`
+- `ability tune`
+
+Implemented preset support:
+
+- `unit buff --preset boss`
+- `unit buff --preset elite`
+
+Implemented map-level kill reward module:
+
+- `set-kill-gold-multiplier`
+- `set-kill-gold-flat-bonus`
+- `set-kill-lumber-bonus`
+- `set-kill-hero-stat-bonus --stat str|agi|int`
+- `format-kills-trigger`
+
+This is the first clear transition from object-data tooling into gameplay script modification.
+
+---
+
+## Current milestone direction
+
+**v0.5 - semantic field refinement and gameplay toolbox expansion**
+
+The next stage is now split across two parallel directions:
+
+### A. semantic model refinement
+
+Continue improving the quality of the internal object model rather than only adding more raw fields.
 
 Current first-pass semantic refinement already started for:
 
@@ -40,178 +76,178 @@ Current first-pass semantic refinement already started for:
 - `attackType`
 - `armorType`
 
-The strategy remains conservative:
+Likely future candidates:
 
-- preserve raw imported fields
-- derive semantic fields only from already observed real sample values
-- avoid speculative large enum systems too early
-- keep the importer/exporter/round-trip workflow stable while refining semantics
+- `race`
+- additional attack/armor semantics
+- isolated raw fields still not well expressed in the model
 
----
+### B. gameplay toolbox expansion
 
-## Toolbox status
+Continue extending the project from object-data tuning toward practical map modding commands, especially script-level reward and growth logic.
 
-The project has now started forming a first-pass map modding toolbox layer.
-
-Currently implemented toolbox-style commands include:
-
-- `unit buff`
-- `item buff`
-- `ability tune`
-
-Current unit preset support includes:
-
-- `boss`
-- `elite`
-
-This marks the transition from a raw object-data pipeline toward a more practical map modding workflow.
+The kill reward module is the first version of this direction.
 
 ---
 
 ## High-priority next work
 
-### 1. Continue semantic field refinement
+### 1. Keep semantic refinement moving carefully
 
-The next most valuable model-level work is to continue reducing placeholder fields and improving semantic quality.
+The model still has placeholder-heavy areas.
 
-Current candidates include:
+High-value next candidates:
 
 - `race`
-- additional attack/armor-related semantics
-- remaining isolated raw fields such as `ucs2`
+- more attack/armor semantics
+- selective raw field cleanup where the semantics are already clear from samples
 
-This work should remain sample-driven and conservative.
+Rule:
 
----
-
-### 2. Strengthen the unit preset system
-
-The preset system is now working and should continue growing carefully.
-
-Useful next steps:
-
-- add a third unit preset only when it represents a clearly different gameplay role
-- keep presets understandable and reusable
-- preserve the rule that manual flags override preset values
-
-Avoid overgrowing the preset list too quickly.
+- stay sample-driven
+- avoid speculative enums
+- preserve raw imported values where useful
 
 ---
 
-### 3. Validate toolbox commands through export flow
+### 2. Strengthen the kill reward module
 
-The toolbox commands already update the internal model, but they should continue being validated through the full object-data workflow.
+The reward module is already usable, but it can still become cleaner and more maintainable.
 
-This means regularly confirming that:
+High-value next improvements:
 
-- toolbox changes appear in `show`
-- toolbox changes export correctly to Patchwork JSON
-- round-trip behavior remains stable
+- reduce formatting duplication inside inserted hero stat blocks
+- consider consolidating multiple hero stat rewards into a cleaner shared structure later
+- continue keeping reward-line updates idempotent
+- keep script output readable after repeated command use
 
-The toolbox layer should not drift away from exporter/importer reality.
+---
+
+### 3. Decide the next gameplay script feature
+
+The project now needs a deliberate next step beyond the current reward module.
+
+Good candidates:
+
+- expand hero stat reward behavior further
+- add new reward/growth patterns
+- add more trigger-scoped script modifications
+- begin a small second gameplay module separate from kill rewards
+
+Do **not** add many unrelated gameplay commands at once.
 
 ---
 
 ## Medium-priority work
 
-### 4. Expand toolbox coverage beyond units
+### 4. Keep the toolbox layer coherent
 
-The toolbox now has first-pass support for:
+The toolbox is now large enough that it should stay conceptually organized.
 
-- units
-- items
-- abilities
+Current conceptual groups:
 
-Future toolbox work can continue growing in a structured way, for example:
+#### Object-data tuning
 
-- more item-oriented presets
-- more ability-oriented tuning helpers
-- more goal-oriented commands instead of raw field-only edits
+- unit / item / ability tuning
+- presets
+- object inspection
+- exporter / round-trip workflow
 
-The project should prefer user-goal-driven commands over endless low-level flags where practical.
+#### Gameplay reward module
 
----
+- gold reward modification
+- lumber reward insertion/update
+- hero stat reward insertion/update
+- trigger formatting cleanup
 
-### 5. Prepare for broader map modding features
-
-The long-term direction still includes moving beyond pure object-data tuning.
-
-Likely future areas include:
-
-- starting resource adjustments
-- spawn/loadout helpers
-- gameplay-trigger-style modifications
-- eventually, scripted gameplay injection features
-
-However, these should come only after the current object-data toolbox layer is stable enough.
+Future work should try to grow along these groupings instead of becoming a random command list.
 
 ---
 
-### 6. Improve regression validation output
+### 5. Improve README / docs consistency
 
-`validate-roundtrip` is already useful, but it can still improve later with:
+The README now reflects the current toolbox and kill reward module, but supporting docs should stay aligned.
 
-- source count vs round-trip count comparison
-- clearer success/failure summaries
-- optional lightweight diff reporting
-- cleaner final validation sections
-
-This remains valuable for long-term confidence, but it is not the most urgent next step.
-
----
-
-## Low-priority / later ideas
-
-### 7. Full map packaging workflow
-
-The project still focuses on the **object-data layer**, not full `.w3x` rebuild workflows.
-
-Possible later direction:
-
-- reinsert generated object files into full map packages
-- validate end-to-end map rebuild behavior
-
-This remains explicitly out of scope for the current milestone.
-
----
-
-### 8. Friendlier interface
-
-The current CLI is already useful for development and tooling, but later improvements could include:
-
-- better CLI formatting
-- more discoverable command help
-- preset browsing
-- lightweight GUI or web UI
-
-This is a later-stage usability improvement, not a current priority.
-
----
-
-## Documentation maintenance
-
-The following docs should stay aligned as the project grows:
+Keep aligned:
 
 - `README.md`
+- `TODO.md`
 - `docs/object-field-mapping-status.md`
 - `docs/second-batch-validation.md`
 - `docs/third-batch-validation.md`
 - `docs/roundtrip-workflow.md`
 
-Whenever a new sample batch, semantic milestone, or toolbox feature is added, these docs should be updated.
+If the kill reward module grows further, a dedicated docs page may become worthwhile.
+
+---
+
+### 6. Keep exporter/round-trip confidence high
+
+Even though the gameplay script commands do not go through the same object-data exporter flow, the object-data foundation is still central.
+
+Continue preserving confidence through:
+
+- repeated sample imports
+- object-data round-trip validation
+- careful separation between object-data features and script-level features
+
+The project should not lose its validation-first character while adding modding features.
+
+---
+
+## Low-priority / later ideas
+
+### 7. Smarter trigger rewriting
+
+Right now script modification is intentionally narrow and string-based.
+
+Possible later directions:
+
+- more structured trigger block rewriting
+- shared formatting / normalization utilities
+- limited pattern abstraction across commands
+- eventually, more reusable script transformation helpers
+
+This is not needed yet if the current focused commands stay stable.
+
+---
+
+### 8. Larger gameplay systems
+
+Later, the project may expand into broader gameplay systems such as:
+
+- more advanced growth systems
+- spawn/loadout helpers
+- additional reward rules
+- broader trigger logic injection
+
+These are later-stage directions and should only happen after the current reward module stays stable.
+
+---
+
+### 9. Full map packaging workflow
+
+The project still does **not** attempt full `.w3x` rebuild or packaging workflows.
+
+Possible later direction:
+
+- reinsert modified script/object files into full map packages
+- validate broader end-to-end rebuild behavior
+
+Still out of scope for the current phase.
 
 ---
 
 ## Current recommended next step
 
-If continuing from the current state, choose **one** of the following:
+If continuing from the current state, pick **one** of these:
 
 1. continue semantic field refinement
-2. add one clearly differentiated new unit preset
-3. validate toolbox commands more deeply through export/round-trip checks
-4. start planning the first map-level modding feature, such as resource adjustment
+2. strengthen / clean up the kill reward module
+3. start one new, clearly scoped gameplay script feature
+4. improve docs and keep the project story coherent
 
-Do not try to do all of them at once.
+Do not try to do all of them in one pass.
 
 ---
 
@@ -219,14 +255,11 @@ Do not try to do all of them at once.
 
 Keep using the current development loop:
 
-1. inspect raw Patchwork data
-2. map or refine a small batch of fields
-3. validate `show`
-4. validate exporter symmetry
-5. run round-trip verification
+1. inspect the current data / script structure
+2. add one narrowly scoped feature
+3. verify visible output
+4. verify repeatability / update behavior
+5. keep formatting and readability under control
+6. document major milestones when a feature group becomes real
 
-For toolbox work, keep this additional rule:
-
-6. prefer goal-oriented commands over purely low-level field editing
-
-This workflow is still the main reason the project remains stable while growing.
+This rule is one of the main reasons the project has remained stable while growing.
