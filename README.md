@@ -152,7 +152,44 @@ For the detailed mapping list, see the docs folder.
 
 <pre class="overflow-visible! px-0!" data-start="4431" data-end="4506"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute inset-x-4 top-12 bottom-4"><div class="pointer-events-none sticky z-40 shrink-0 z-1!"><div class="sticky bg-token-border-light"></div></div></div><div class="relative"><div class=""><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼ5 ͼj"><div class="cm-scroller"><div class="cm-content q9tKkq_readonly"><span class="ͼd">npm</span><span> run dev:once </span><span class="ͼf">--</span><span> validate-roundtrip ./samples/probe-input-02</span></div></div></div></div></div></div></div></div></div></div><div class=""><div class=""></div></div></div></div></div></pre>
 
+## Toolbox commands
+
+In addition to low-level object inspection and field-by-field editing, the project now includes a first-pass toolbox layer for faster map modding workflows.
+
+These commands are designed to update multiple gameplay-relevant values in a single step.
+
+### Buff a unit
+
+```
+npm run dev:once -- unit buff h000 --hp 5000 --damage 200 --armor 20 --range 900 --speed 350
+```
+
+Supported flags: --hp, --damage, --armor, --range, --speed
+
+### Buff an item
+
+```
+npm run dev:once -- item buff I000 --gold 5000 --lumber 200 --str 20 --level 9 --cooldown 3
+```
+
+Supported flags: --gold, --lumber, --str, --level, --cooldown
+
+### Tune an ability
+
+```
+npm run dev:once -- ability tune A000 --mana 50 --cooldown 2 --range 800
+```
+
+Supported flags: --mana, --cooldown, --range
+
+### Why this layer matters
+
+These commands mark the transition from a raw object-data pipeline into a more practical map modding toolbox.
+
+Instead of editing one field at a time, the toolbox commands provide more goal-oriented entry points for common balance and gameplay adjustments.
+
 ---
+
 
 ## Example validation output
 
@@ -247,6 +284,5 @@ Planned next directions include:
 * strengthening regression validation
 * testing against more complex sample maps
 * optionally building a more user-friendly interface later
-
 
 <pre class="overflow-visible! px-0!" data-start="7240" data-end="7733"><div class="relative w-full mt-4 mb-1"><div class=""><div class="relative"><div class="h-full min-h-0 min-w-0"><div class="h-full min-h-0 min-w-0"><div class="border border-token-border-light border-radius-3xl corner-superellipse/1.1 rounded-3xl"><div class="h-full w-full border-radius-3xl bg-token-bg-elevated-secondary corner-superellipse/1.1 overflow-clip rounded-3xl lxnfua_clipPathFallback"><div class="pointer-events-none absolute end-1.5 top-1 z-2 md:end-2 md:top-1"></div><div class="relative"><div class="pe-11 pt-3"><div class="relative z-0 flex max-w-full"><div id="code-block-viewer" dir="ltr" class="q9tKkq_viewer cm-editor z-10 light:cm-light dark:cm-light flex h-full w-full flex-col items-stretch ͼ5 ͼj"><div class="cm-scroller"><div class="cm-content q9tKkq_readonly"></div></div></div></div></div></div></div></div></div></div></div></div></div></pre>
