@@ -62,6 +62,9 @@ Implemented named hero growth presets:
 
 - `warrior`
 - `mage`
+- `assassin`
+- `tank`
+- `support`
 
 Current hero growth preset behavior:
 
@@ -134,7 +137,7 @@ The hero growth layer is now usable, but it can still grow into a more expressiv
 
 High-value next improvements:
 
-- add one or two additional named growth presets only if they are clearly differentiated
+- add new presets only when they are clearly differentiated
 - keep preset output stable and readable
 - preserve the rule that explicit numeric flags override preset values
 - avoid turning presets into an unstructured long list
@@ -185,7 +188,7 @@ Future work should grow along these groupings instead of becoming a random comma
 
 ### 5. Improve README / docs consistency
 
-The README now reflects the current toolbox and hero growth module, but supporting docs should stay aligned.
+The README now reflects the current toolbox and hero growth module, and docs should stay aligned when the next major phase lands.
 
 Keep aligned:
 
