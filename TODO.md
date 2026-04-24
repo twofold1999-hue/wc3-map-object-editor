@@ -125,13 +125,34 @@ Current behavior:
 - starting hero level / skill point lines stay compact and adjacent
 - repeated execution updates rather than duplicates
 
+### 4. Player-specific starting settings
+
+Implemented commands:
+
+- `set-player-starting-gold`
+- `set-player-starting-lumber`
+- `set-player-starting-resources-preset`
+
+Implemented named player-specific starting resource presets:
+
+- `vip`
+- `boosted`
+- `handicap`
+
+Current behavior:
+
+- unified starting resource blocks remain intact as defaults
+- player-specific override blocks are written separately
+- explicit numeric flags override preset values
+- repeated execution updates existing player-specific override blocks instead of duplicating them
+
 This is the point where the project clearly became a multi-module gameplay script toolbox rather than a single-feature experiment.
 
 ---
 
 ## Current milestone direction
 
-**v0.6 - script module layering and gameplay toolbox expansion**
+**v0.7 - multi-module gameplay tooling**
 
 The next stage is now split across two parallel directions:
 
@@ -160,6 +181,7 @@ Current module families:
 - kill reward / hero growth
 - starting resources
 - starting hero power
+- player-specific starting settings
 
 ---
 
@@ -183,16 +205,17 @@ Rule:
 
 ---
 
-### 2. Decide the fourth gameplay script module
+### 2. Decide the fifth gameplay script module
 
-The project now has three stable module families.
-The next major code step should likely be a **fourth** clearly scoped gameplay module instead of endlessly deepening current ones.
+The project now has four stable module families.
+The next major code step should likely be a **fifth** clearly scoped gameplay module instead of endlessly deepening current ones.
 
 Good candidates:
 
-- player-specific starting settings
+- player-specific starting hero power
 - hero loadout / starting item helpers
 - another tightly scoped combat or progression trigger module
+- conditional or difficulty-aware gameplay overrides
 
 Do **not** start with a huge generalized scripting framework.
 
@@ -245,6 +268,7 @@ The toolbox now has three clear layers:
 - kill reward / hero growth
 - starting resources
 - starting hero power
+- player-specific starting settings
 
 Future work should continue reinforcing these categories instead of becoming a random command list.
 
@@ -306,8 +330,9 @@ Later, the project may expand into broader gameplay systems such as:
 - hero loadout systems
 - additional reward rules
 - broader trigger logic injection
+- player-specific power systems
 
-These are later-stage directions and should only happen after the current three gameplay modules remain stable.
+These are later-stage directions and should only happen after the current four gameplay modules remain stable.
 
 ---
 
@@ -329,7 +354,7 @@ Still out of scope for the current phase.
 If continuing from the current state, pick **one** of these:
 
 1. continue semantic field refinement
-2. add a fourth clearly scoped gameplay script module
+2. add a fifth clearly scoped gameplay script module
 3. improve internal script transformation reuse
 4. strengthen docs only when the next large phase lands
 
