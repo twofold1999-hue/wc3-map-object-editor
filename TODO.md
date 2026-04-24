@@ -14,7 +14,7 @@ It now has three visible layers:
 
 1. **object-data pipeline**
 2. **toolbox-style object tuning commands**
-3. **first-pass kill reward / hero growth gameplay script module**
+3. **multiple focused map-level gameplay script modules**
 
 ---
 
@@ -43,12 +43,18 @@ Implemented object-data toolbox commands:
 - `item buff`
 - `ability tune`
 
-Implemented preset support:
+Implemented object-data presets:
 
 - `unit buff --preset boss`
 - `unit buff --preset elite`
 
-Implemented map-level kill reward / hero growth module:
+---
+
+## Current gameplay script modules
+
+### 1. Kill reward / hero growth
+
+Implemented commands:
 
 - `set-kill-gold-multiplier`
 - `set-kill-gold-flat-bonus`
@@ -66,7 +72,7 @@ Implemented named hero growth presets:
 - `tank`
 - `support`
 
-Current hero growth preset behavior:
+Current behavior:
 
 - named presets can be applied through `set-kill-hero-growth-preset --preset ...`
 - explicit numeric flags override preset values
@@ -77,13 +83,55 @@ Current hero growth preset behavior:
   - `SetHeroInt`
   - `AddHeroXP`
 
-This is the first clear transition from object-data tooling into gameplay script modification.
+### 2. Starting resources
+
+Implemented commands:
+
+- `set-starting-gold`
+- `set-starting-lumber`
+- `set-starting-resources-preset`
+
+Implemented named starting resource presets:
+
+- `standard`
+- `rich`
+- `scarce`
+
+Current behavior:
+
+- starting gold and lumber are written as compact begin/end marked blocks
+- repeated execution updates existing blocks instead of duplicating them
+- explicit numeric flags override preset values
+
+### 3. Starting hero power
+
+Implemented commands:
+
+- `set-starting-hero-level`
+- `set-starting-hero-skill-points`
+- `format-starting-hero-power`
+- `set-starting-hero-power-preset`
+
+Implemented named starting hero power presets:
+
+- `standard`
+- `strong`
+- `elite`
+
+Current behavior:
+
+- the 5 known hero-selection action functions are updated consistently
+- explicit numeric flags override preset values
+- starting hero level / skill point lines stay compact and adjacent
+- repeated execution updates rather than duplicates
+
+This is the point where the project clearly became a multi-module gameplay script toolbox rather than a single-feature experiment.
 
 ---
 
 ## Current milestone direction
 
-**v0.5 - semantic field refinement and gameplay toolbox expansion**
+**v0.6 - script module layering and gameplay toolbox expansion**
 
 The next stage is now split across two parallel directions:
 
@@ -103,11 +151,15 @@ Likely future candidates:
 - additional attack/armor semantics
 - isolated raw fields still not well expressed in the model
 
-### B. gameplay toolbox expansion
+### B. gameplay module expansion
 
-Continue extending the project from object-data tuning toward practical map modding commands, especially script-level reward and growth logic.
+Continue extending the project from object-data tuning toward practical map modding commands, while keeping the new gameplay modules coherent.
 
-The kill reward / hero growth module is the first version of this direction.
+Current module families:
+
+- kill reward / hero growth
+- starting resources
+- starting hero power
 
 ---
 
@@ -131,40 +183,55 @@ Rule:
 
 ---
 
-### 2. Strengthen the hero growth preset layer
+### 2. Decide the fourth gameplay script module
 
-The hero growth layer is now usable, but it can still grow into a more expressive gameplay template system.
-
-High-value next improvements:
-
-- add new presets only when they are clearly differentiated
-- keep preset output stable and readable
-- preserve the rule that explicit numeric flags override preset values
-- avoid turning presets into an unstructured long list
-
----
-
-### 3. Decide the next gameplay script feature
-
-The project now needs a deliberate next step beyond the current reward / growth module.
+The project now has three stable module families.
+The next major code step should likely be a **fourth** clearly scoped gameplay module instead of endlessly deepening current ones.
 
 Good candidates:
 
-- a second small gameplay module separate from kill rewards
-- a new reward-adjacent mechanic that still fits `Trig_Kills_Actions`
-- more structured gameplay presets built on the current hero growth foundation
+- player-specific starting settings
+- hero loadout / starting item helpers
+- another tightly scoped combat or progression trigger module
 
-Do **not** add many unrelated gameplay commands at once.
+Do **not** start with a huge generalized scripting framework.
+
+---
+
+### 3. Keep preset layers disciplined
+
+The project now has multiple preset systems.
+That is powerful, but it can become messy if expanded carelessly.
+
+Rules going forward:
+
+- only add presets when they are clearly differentiated
+- prefer small, understandable preset sets
+- preserve explicit flag override behavior
+- keep output stable and readable
 
 ---
 
 ## Medium-priority work
 
-### 4. Keep the toolbox layer coherent
+### 4. Improve script transformation reuse
 
-The toolbox is now large enough that it should stay conceptually organized.
+The project is now large enough that repeated string-rewrite patterns should gradually become more reusable.
 
-Current conceptual groups:
+High-value internal improvements:
+
+- shared helper utilities for trigger block detection
+- shared helper utilities for compact block rewriting
+- more consistent formatter patterns across modules
+- better internal organization of known trigger targets
+
+This should be done carefully, without breaking already validated commands.
+
+---
+
+### 5. Keep the toolbox structure coherent
+
+The toolbox now has three clear layers:
 
 #### Object-data tuning
 
@@ -173,22 +240,19 @@ Current conceptual groups:
 - object inspection
 - exporter / round-trip workflow
 
-#### Kill reward / hero growth module
+#### Gameplay script modules
 
-- gold reward modification
-- lumber reward insertion/update
-- hero stat reward insertion/update
-- hero XP reward insertion/update
-- hero growth presets
-- trigger formatting / normalization
+- kill reward / hero growth
+- starting resources
+- starting hero power
 
-Future work should grow along these groupings instead of becoming a random command list.
+Future work should continue reinforcing these categories instead of becoming a random command list.
 
 ---
 
-### 5. Improve README / docs consistency
+### 6. Keep README / docs consistency
 
-The README now reflects the current toolbox and hero growth module, and docs should stay aligned when the next major phase lands.
+README and TODO now reflect the current project stage, but supporting docs should stay aligned when the next major phase lands.
 
 Keep aligned:
 
@@ -199,13 +263,13 @@ Keep aligned:
 - `docs/third-batch-validation.md`
 - `docs/roundtrip-workflow.md`
 
-If the hero growth preset layer grows further, a dedicated docs page may become worthwhile.
+When the next major gameplay module lands, it may be worth adding a dedicated docs page for script modules.
 
 ---
 
-### 6. Keep exporter/round-trip confidence high
+### 7. Keep exporter/round-trip confidence high
 
-Even though the gameplay script commands do not go through the same object-data exporter flow, the object-data foundation is still central.
+Even though gameplay script commands do not go through the same object-data exporter flow, the object-data foundation is still central.
 
 Continue preserving confidence through:
 
@@ -219,7 +283,7 @@ The project should not lose its validation-first character while adding modding 
 
 ## Low-priority / later ideas
 
-### 7. Smarter trigger rewriting
+### 8. Smarter trigger rewriting
 
 Right now script modification is intentionally narrow and string-based.
 
@@ -234,20 +298,20 @@ This is not needed yet if the current focused commands stay stable.
 
 ---
 
-### 8. Larger gameplay systems
+### 9. Broader gameplay systems
 
 Later, the project may expand into broader gameplay systems such as:
 
 - more advanced growth systems
-- spawn/loadout helpers
+- hero loadout systems
 - additional reward rules
 - broader trigger logic injection
 
-These are later-stage directions and should only happen after the current reward / growth module stays stable.
+These are later-stage directions and should only happen after the current three gameplay modules remain stable.
 
 ---
 
-### 9. Full map packaging workflow
+### 10. Full map packaging workflow
 
 The project still does **not** attempt full `.w3x` rebuild or packaging workflows.
 
@@ -265,9 +329,9 @@ Still out of scope for the current phase.
 If continuing from the current state, pick **one** of these:
 
 1. continue semantic field refinement
-2. strengthen / extend hero growth presets
-3. start one new, clearly scoped gameplay script feature
-4. improve docs and keep the project story coherent
+2. add a fourth clearly scoped gameplay script module
+3. improve internal script transformation reuse
+4. strengthen docs only when the next large phase lands
 
 Do not try to do all of them in one pass.
 
