@@ -14,7 +14,7 @@ It now has three visible layers:
 
 1. **object-data pipeline**
 2. **toolbox-style object tuning commands**
-3. **first-pass kill reward gameplay script module**
+3. **first-pass kill reward / hero growth gameplay script module**
 
 ---
 
@@ -48,13 +48,31 @@ Implemented preset support:
 - `unit buff --preset boss`
 - `unit buff --preset elite`
 
-Implemented map-level kill reward module:
+Implemented map-level kill reward / hero growth module:
 
 - `set-kill-gold-multiplier`
 - `set-kill-gold-flat-bonus`
 - `set-kill-lumber-bonus`
 - `set-kill-hero-stat-bonus --stat str|agi|int`
+- `set-kill-exp-bonus`
+- `set-kill-hero-growth-preset`
 - `format-kills-trigger`
+
+Implemented named hero growth presets:
+
+- `warrior`
+- `mage`
+
+Current hero growth preset behavior:
+
+- named presets can be applied through `set-kill-hero-growth-preset --preset ...`
+- explicit numeric flags override preset values
+- zero-valued growth entries are omitted from final output
+- final hero growth blocks are normalized into a stable canonical order:
+  - `SetHeroStr`
+  - `SetHeroAgi`
+  - `SetHeroInt`
+  - `AddHeroXP`
 
 This is the first clear transition from object-data tooling into gameplay script modification.
 
@@ -86,7 +104,7 @@ Likely future candidates:
 
 Continue extending the project from object-data tuning toward practical map modding commands, especially script-level reward and growth logic.
 
-The kill reward module is the first version of this direction.
+The kill reward / hero growth module is the first version of this direction.
 
 ---
 
@@ -110,29 +128,28 @@ Rule:
 
 ---
 
-### 2. Strengthen the kill reward module
+### 2. Strengthen the hero growth preset layer
 
-The reward module is already usable, but it can still become cleaner and more maintainable.
+The hero growth layer is now usable, but it can still grow into a more expressive gameplay template system.
 
 High-value next improvements:
 
-- reduce formatting duplication inside inserted hero stat blocks
-- consider consolidating multiple hero stat rewards into a cleaner shared structure later
-- continue keeping reward-line updates idempotent
-- keep script output readable after repeated command use
+- add one or two additional named growth presets only if they are clearly differentiated
+- keep preset output stable and readable
+- preserve the rule that explicit numeric flags override preset values
+- avoid turning presets into an unstructured long list
 
 ---
 
 ### 3. Decide the next gameplay script feature
 
-The project now needs a deliberate next step beyond the current reward module.
+The project now needs a deliberate next step beyond the current reward / growth module.
 
 Good candidates:
 
-- expand hero stat reward behavior further
-- add new reward/growth patterns
-- add more trigger-scoped script modifications
-- begin a small second gameplay module separate from kill rewards
+- a second small gameplay module separate from kill rewards
+- a new reward-adjacent mechanic that still fits `Trig_Kills_Actions`
+- more structured gameplay presets built on the current hero growth foundation
 
 Do **not** add many unrelated gameplay commands at once.
 
@@ -153,20 +170,22 @@ Current conceptual groups:
 - object inspection
 - exporter / round-trip workflow
 
-#### Gameplay reward module
+#### Kill reward / hero growth module
 
 - gold reward modification
 - lumber reward insertion/update
 - hero stat reward insertion/update
-- trigger formatting cleanup
+- hero XP reward insertion/update
+- hero growth presets
+- trigger formatting / normalization
 
-Future work should try to grow along these groupings instead of becoming a random command list.
+Future work should grow along these groupings instead of becoming a random command list.
 
 ---
 
 ### 5. Improve README / docs consistency
 
-The README now reflects the current toolbox and kill reward module, but supporting docs should stay aligned.
+The README now reflects the current toolbox and hero growth module, but supporting docs should stay aligned.
 
 Keep aligned:
 
@@ -177,7 +196,7 @@ Keep aligned:
 - `docs/third-batch-validation.md`
 - `docs/roundtrip-workflow.md`
 
-If the kill reward module grows further, a dedicated docs page may become worthwhile.
+If the hero growth preset layer grows further, a dedicated docs page may become worthwhile.
 
 ---
 
@@ -221,7 +240,7 @@ Later, the project may expand into broader gameplay systems such as:
 - additional reward rules
 - broader trigger logic injection
 
-These are later-stage directions and should only happen after the current reward module stays stable.
+These are later-stage directions and should only happen after the current reward / growth module stays stable.
 
 ---
 
@@ -243,7 +262,7 @@ Still out of scope for the current phase.
 If continuing from the current state, pick **one** of these:
 
 1. continue semantic field refinement
-2. strengthen / clean up the kill reward module
+2. strengthen / extend hero growth presets
 3. start one new, clearly scoped gameplay script feature
 4. improve docs and keep the project story coherent
 
