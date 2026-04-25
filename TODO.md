@@ -10,11 +10,12 @@ It is intentionally short, practical, and aligned with the current project direc
 
 The project is no longer only an object-data round-trip prototype.
 
-It now has three visible layers:
+It now has four visible layers:
 
 1. **object-data pipeline**
 2. **toolbox-style object tuning commands**
 3. **multiple focused map-level gameplay script modules**
+4. **reusable script transformation layers**
 
 ---
 
@@ -146,13 +147,72 @@ Current behavior:
 - explicit numeric flags override preset values
 - repeated execution updates existing player-specific override blocks instead of duplicating them
 
-This is the point where the project clearly became a multi-module gameplay script toolbox rather than a single-feature experiment.
+### 5. Player-specific starting hero power
+
+Implemented commands:
+
+- `set-player-starting-hero-level`
+- `set-player-starting-hero-skill-points`
+- `set-player-starting-hero-power-preset`
+- `format-player-starting-hero-power`
+
+Implemented named player-specific hero power presets:
+
+- `standard`
+- `strong`
+- `elite`
+
+Current behavior:
+
+- the same 5 known hero-selection action functions are updated consistently
+- global hero power remains the default
+- player-specific hero power override blocks are written separately
+- explicit numeric flags override preset values
+- repeated execution updates existing override blocks instead of duplicating them
+- readable ordering is preserved:
+  - global level
+  - player level block
+  - global skill points
+  - player skill-points block
+  - select unit
+
+This is the point where the project clearly became a multi-module gameplay scripting toolbox with reusable internal transform layers rather than a collection of isolated commands.
+
+---
+
+## Current internal scripting structure
+
+The project now has two clear internal helper layers for script rewriting.
+
+### Shared script transform layer
+
+Current shared helpers cover:
+
+- regex escaping
+- newline detection
+- call-line indent detection
+- function-block replacement
+- marker-block upsert
+- blank-line compaction
+
+### Module-level helper layer
+
+Current example:
+
+- `starting-hero-power-utils`
+- `starting-hero-power-updaters`
+
+This structure keeps:
+
+- generic text transformation in shared helpers
+- module-specific block-update logic in module helpers
+- command files focused on parsing and orchestration
 
 ---
 
 ## Current milestone direction
 
-**v0.7 - multi-module gameplay tooling**
+**v0.8 - script transform layering and fifth gameplay module**
 
 The next stage is now split across two parallel directions:
 
@@ -169,12 +229,12 @@ Current first-pass semantic refinement already started for:
 Likely future candidates:
 
 - `race`
-- additional attack/armor semantics
-- isolated raw fields still not well expressed in the model
+- more attack/armor semantics
+- selective raw field cleanup where the semantics are already clear from samples
 
 ### B. gameplay module expansion
 
-Continue extending the project from object-data tuning toward practical map modding commands, while keeping the new gameplay modules coherent.
+Continue extending the project from object-data tuning toward practical map modding commands, while keeping the internal script transformation layers disciplined.
 
 Current module families:
 
@@ -182,6 +242,7 @@ Current module families:
 - starting resources
 - starting hero power
 - player-specific starting settings
+- player-specific starting hero power
 
 ---
 
@@ -205,48 +266,47 @@ Rule:
 
 ---
 
-### 2. Decide the fifth gameplay script module
+### 2. Decide the sixth gameplay script module
 
-The project now has four stable module families.
-The next major code step should likely be a **fifth** clearly scoped gameplay module instead of endlessly deepening current ones.
+The project now has five stable module families.
+The next major code step should likely be a **sixth** clearly scoped gameplay module instead of endlessly deepening current ones.
 
 Good candidates:
 
-- player-specific starting hero power
-- hero loadout / starting item helpers
+- player-specific starting items / loadout
+- difficulty-aware starting settings
+- player-specific kill reward overrides
 - another tightly scoped combat or progression trigger module
-- conditional or difficulty-aware gameplay overrides
 
 Do **not** start with a huge generalized scripting framework.
 
 ---
 
-### 3. Keep preset layers disciplined
+### 3. Keep helper extraction disciplined
 
-The project now has multiple preset systems.
-That is powerful, but it can become messy if expanded carelessly.
+The project now has real shared helpers and module helpers.
+That is useful, but it can become messy if abstraction expands too quickly.
 
 Rules going forward:
 
-- only add presets when they are clearly differentiated
-- prefer small, understandable preset sets
-- preserve explicit flag override behavior
-- keep output stable and readable
+- only extract shared helpers when repetition is clearly real
+- keep module-level business logic out of shared helpers
+- avoid command files importing business logic from each other
+- prefer small, explicit helper layers over broad frameworks
 
 ---
 
 ## Medium-priority work
 
-### 4. Improve script transformation reuse
+### 4. Improve script transformation reuse carefully
 
-The project is now large enough that repeated string-rewrite patterns should gradually become more reusable.
+Now that the helper layers exist, further reuse should be done only where patterns are stable.
 
-High-value internal improvements:
+Likely candidates:
 
-- shared helper utilities for trigger block detection
-- shared helper utilities for compact block rewriting
+- additional module-specific updater files
+- better shared handling for known insert-anchor strategies
 - more consistent formatter patterns across modules
-- better internal organization of known trigger targets
 
 This should be done carefully, without breaking already validated commands.
 
@@ -254,7 +314,7 @@ This should be done carefully, without breaking already validated commands.
 
 ### 5. Keep the toolbox structure coherent
 
-The toolbox now has three clear layers:
+The toolbox now has four clear layers:
 
 #### Object-data tuning
 
@@ -269,6 +329,12 @@ The toolbox now has three clear layers:
 - starting resources
 - starting hero power
 - player-specific starting settings
+- player-specific starting hero power
+
+#### Internal script helpers
+
+- shared script transforms
+- module-level updaters / utils
 
 Future work should continue reinforcing these categories instead of becoming a random command list.
 
@@ -276,7 +342,7 @@ Future work should continue reinforcing these categories instead of becoming a r
 
 ### 6. Keep README / docs consistency
 
-README and TODO now reflect the current project stage, but supporting docs should stay aligned when the next major phase lands.
+README and TODO should continue reflecting both external features and internal structure.
 
 Keep aligned:
 
@@ -287,7 +353,7 @@ Keep aligned:
 - `docs/third-batch-validation.md`
 - `docs/roundtrip-workflow.md`
 
-When the next major gameplay module lands, it may be worth adding a dedicated docs page for script modules.
+If the next milestone adds another major gameplay module, it may finally be worth adding a dedicated docs page for gameplay script modules.
 
 ---
 
@@ -309,14 +375,14 @@ The project should not lose its validation-first character while adding modding 
 
 ### 8. Smarter trigger rewriting
 
-Right now script modification is intentionally narrow and string-based.
+Script modification is still intentionally string-based.
 
 Possible later directions:
 
 - more structured trigger block rewriting
-- shared formatting / normalization utilities
 - limited pattern abstraction across commands
-- eventually, more reusable script transformation helpers
+- more reusable anchor-resolution helpers
+- additional module-level updater files
 
 This is not needed yet if the current focused commands stay stable.
 
@@ -331,8 +397,9 @@ Later, the project may expand into broader gameplay systems such as:
 - additional reward rules
 - broader trigger logic injection
 - player-specific power systems
+- more conditional/difficulty-aware configuration
 
-These are later-stage directions and should only happen after the current four gameplay modules remain stable.
+These are later-stage directions and should only happen after the current five gameplay modules remain stable.
 
 ---
 
@@ -354,8 +421,8 @@ Still out of scope for the current phase.
 If continuing from the current state, pick **one** of these:
 
 1. continue semantic field refinement
-2. add a fifth clearly scoped gameplay script module
-3. improve internal script transformation reuse
+2. add a sixth clearly scoped gameplay script module
+3. improve helper reuse only where repetition is already real
 4. strengthen docs only when the next large phase lands
 
 Do not try to do all of them in one pass.
